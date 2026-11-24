@@ -1,25 +1,21 @@
-"""Write one line of earned pride to /output/entry.txt.
-
-The line: a boy who stutters says his own name clean through at the
-register, and the cashier answers it like any other name. Standard
-library only, deterministic: every run writes the same bytes.
-"""
+#!/usr/bin/env python3
+"""Write one line of earned pride to the output file."""
 
 import os
 
-LINE = (
-    "The boy who could not say his own name without stopping said it "
-    "clean through at the register, and the cashier answered it like "
-    "any other name."
-)
+LINE = "The boy who could not say his own name without stopping said it clean through at the register, and the cashier answered it like any other name."
+
+
+def output_path():
+    directory = os.environ.get("MAKEFUN_OUTPUT_DIR") or "/output"
+    return os.path.join(directory, "entry.txt")
 
 
 def main():
-    out_dir = os.environ.get("MAKEFUN_OUTPUT_DIR", "/output")
-    os.makedirs(out_dir, exist_ok=True)
-    path = os.path.join(out_dir, "entry.txt")
-    with open(path, "w", encoding="utf-8") as f:
-        f.write(LINE + "\n")
+    # Deterministic: the same bytes are written on every run.
+    path = output_path()
+    with open(path, "w", encoding="utf-8", newline="\n") as handle:
+        handle.write(LINE + "\n")
     os.chmod(path, 0o644)
 
 
